@@ -29,7 +29,7 @@ function App() {
         return () => {
             isMounted = false;
         };
-    }, [fetchGraphQL, setName]);
+    }, [setName]);
 
     return (
         <div className="App">
