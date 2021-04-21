@@ -4,7 +4,9 @@ import {
     RelayEnvironmentProvider,
     loadQuery,
     usePreloadedQuery,
+    PreloadedQuery,
 } from 'react-relay/hooks';
+import { AppRepositoryNameQuery } from '__generated__/AppRepositoryNameQuery.graphql';
 import './App.css';
 import RelayEnvironment from './relay-environment';
 
@@ -17,9 +19,13 @@ const RepositoryNameQuery = graphql`
     }
 `;
 
-const preloadedQuery = loadQuery(RelayEnvironment, RepositoryNameQuery, {
-    /* query variables */
-});
+const preloadedQuery = loadQuery<AppRepositoryNameQuery>(
+    RelayEnvironment,
+    RepositoryNameQuery,
+    {
+        /* query variables */
+    },
+);
 
 // Inner component that reads the preloaded query results via `usePreloadedQuery()`.
 // This works as follows:
@@ -29,8 +35,10 @@ const preloadedQuery = loadQuery(RelayEnvironment, RepositoryNameQuery, {
 //   fallback.
 // - If the query failed, it throws the failure error. For simplicity we aren't
 //   handling the failure case here.
-function App(props: { preloadedQuery: typeof preloadedQuery }) {
-    const data: any = usePreloadedQuery(
+function App(props: {
+    preloadedQuery: PreloadedQuery<AppRepositoryNameQuery>;
+}) {
+    const data = usePreloadedQuery<AppRepositoryNameQuery>(
         RepositoryNameQuery,
         props.preloadedQuery,
     );
@@ -38,7 +46,7 @@ function App(props: { preloadedQuery: typeof preloadedQuery }) {
     return (
         <div className="App">
             <header className="App-header">
-                <p>{data.repository.name}</p>
+                <p>{data?.repository?.name}</p>
             </header>
         </div>
     );
