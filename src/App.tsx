@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import graphql from 'babel-plugin-relay/macro';
 import {
     RelayEnvironmentProvider,
@@ -6,7 +6,6 @@ import {
     usePreloadedQuery,
 } from 'react-relay/hooks';
 import './App.css';
-import fetchGraphQL from './fetch-graphql';
 import RelayEnvironment from './relay-environment';
 
 // Define a query

@@ -19,7 +19,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "relay": "yarn run relay-compiler --schema schema.graphql --src ./src/ --watchman false $@",
+    "relay": "yarn run relay-compiler --schema schema.graphql --src ./src/ --language typescript --artifactDirectory ./src/__generated__ --watchman false $@",
     "start": "yarn run relay && react-scripts start",
     "build": "yarn run relay && react-scripts build",
     "test": "react-scripts test",
@@ -49,6 +49,12 @@
     "babel-plugin-relay": "^11.0.2",
     "graphql": "^15.5.0",
     "prettier": "2.2.1",
-    "relay-compiler": "^11.0.2"
+    "relay-compiler": "^11.0.2",
+    "relay-compiler-language-typescript": "^14.0.0"
+  },
+  "babelMacros": {
+    "relay": {
+      "artifactDirectory": "./src/__generated__"
+    }
   }
 }
