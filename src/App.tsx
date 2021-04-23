@@ -1,12 +1,6 @@
 import AppTabs from 'AppTabs';
 import React, { Suspense } from 'react';
-
-import {
-    RelayEnvironmentProvider,
-    loadQuery,
-    usePreloadedQuery,
-    PreloadedQuery,
-} from 'react-relay/hooks';
+import { RelayEnvironmentProvider, loadQuery } from 'react-relay/hooks';
 import HomeTabRepositoryNameQuery, {
     HomeTabRepositoryNameQuery as HomeTabRepositoryNameQueryType,
 } from '__generated__/HomeTabRepositoryNameQuery.graphql';
