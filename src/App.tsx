@@ -6,6 +6,7 @@ import HomeTabRepositoryNameQuery, {
 } from '__generated__/HomeTabRepositoryNameQuery.graphql';
 import './App.css';
 import RelayEnvironment from './relay-environment';
+import ErrorBoundary from './ErrorBoundary';
 
 const preloadedQuery = loadQuery<HomeTabRepositoryNameQueryType>(
     RelayEnvironment,
@@ -21,9 +22,11 @@ const preloadedQuery = loadQuery<HomeTabRepositoryNameQueryType>(
 function AppRoot() {
     return (
         <Suspense fallback={'Loading...'}>
-            <RelayEnvironmentProvider environment={RelayEnvironment}>
-                <AppTabs initialQueryRef={preloadedQuery} />
-            </RelayEnvironmentProvider>
+            <ErrorBoundary fallback={(error) => <div>Error!</div>}>
+                <RelayEnvironmentProvider environment={RelayEnvironment}>
+                    <AppTabs initialQueryRef={preloadedQuery} />
+                </RelayEnvironmentProvider>
+            </ErrorBoundary>
         </Suspense>
     );
 }
