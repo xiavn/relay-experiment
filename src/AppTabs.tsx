@@ -20,6 +20,9 @@ function AppTabs() {
         loadHomeTabQuery({ owner: 'facebook', name: 'relay' });
         updateScreen('home');
     };
+    const onSelectOtherTab = () => {
+        updateScreen('other');
+    };
     return (
         <div>
             <ul>
@@ -27,7 +30,7 @@ function AppTabs() {
                     <button onClick={onSelectHomeTab}>Home</button>
                 </li>
                 <li>
-                    <button>Other</button>
+                    <button onClick={onSelectOtherTab}>Other</button>
                 </li>
             </ul>
             {screen === 'home' &&
