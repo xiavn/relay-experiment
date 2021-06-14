@@ -1,11 +1,22 @@
 async function fetchGraphQL(text: string | null | undefined, variables?: any) {
-    const REACT_APP_GITHUB_AUTH_TOKEN = process.env.REACT_APP_GITHUB_AUTH_TOKEN;
+    // const REACT_APP_GITHUB_AUTH_TOKEN = process.env.REACT_APP_GITHUB_AUTH_TOKEN;
 
-    // Fetch data from GitHub's GraphQL API:
-    const response = await fetch('https://api.github.com/graphql', {
+    // // Fetch data from GitHub's GraphQL API:
+    // const response = await fetch('https://api.github.com/graphql', {
+    //     method: 'POST',
+    //     headers: {
+    //         Authorization: `bearer ${REACT_APP_GITHUB_AUTH_TOKEN}`,
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //         query: text,
+    //         variables,
+    //     }),
+    // });
+
+    const response = await fetch('http://localhost:4000', {
         method: 'POST',
         headers: {
-            Authorization: `bearer ${REACT_APP_GITHUB_AUTH_TOKEN}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
