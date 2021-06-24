@@ -3,21 +3,19 @@ import HomeTab from 'HomeTab';
 import React, { Fragment, useState } from 'react';
 import { useQueryLoader } from 'react-relay';
 import HomeTabRepositoryNameQuery, {
-    HomeTabRepositoryNameQuery as HomeTabRepositoryNameQueryType,
-} from '__generated__/HomeTabRepositoryNameQuery.graphql';
+    HomeTabFeedQuery as HomeTabFeedQueryType,
+} from '__generated__/HomeTabFeedQuery.graphql';
 
 function AppTabs() {
     const [
         homeTabQueryRef,
         loadHomeTabQuery,
-    ] = useQueryLoader<HomeTabRepositoryNameQueryType>(
-        HomeTabRepositoryNameQuery,
-    );
+    ] = useQueryLoader<HomeTabFeedQueryType>(HomeTabRepositoryNameQuery);
 
     const [screen, updateScreen] = useState('home');
 
     const onSelectHomeTab = () => {
-        loadHomeTabQuery({ owner: 'facebook', name: 'relay' });
+        loadHomeTabQuery({});
         updateScreen('home');
     };
     const onSelectOtherTab = () => {
@@ -37,9 +35,7 @@ function AppTabs() {
             homeTabQueryRef !== null &&
             typeof homeTabQueryRef !== 'undefined' ? (
                 <ErrorBoundary
-                    onRetry={() =>
-                        loadHomeTabQuery({ owner: 'facebook', name: 'relay' })
-                    }
+                    onRetry={() => loadHomeTabQuery({})}
                     fallback={({ error, retry }) => (
                         <Fragment>
                             <div>Error! {error.message}</div>
