@@ -1,41 +1,49 @@
 import ErrorBoundary from 'ErrorBoundary';
-import HomeTab from 'HomeTab';
+import FeedTab from 'FeedTab';
 import React, { Fragment, useState } from 'react';
 import { useQueryLoader } from 'react-relay';
-import HomeTabRepositoryNameQuery, {
-    HomeTabFeedQuery as HomeTabFeedQueryType,
-} from '__generated__/HomeTabFeedQuery.graphql';
+import FeedTabFeedQuery, {
+    FeedTabFeedQuery as FeedTabFeedQueryType,
+} from '__generated__/FeedTabFeedQuery.graphql';
+
+type tabNames = 'home' | 'feed' | 'other';
 
 function AppTabs() {
     const [
-        homeTabQueryRef,
-        loadHomeTabQuery,
-    ] = useQueryLoader<HomeTabFeedQueryType>(HomeTabRepositoryNameQuery);
+        feedTabQueryRef,
+        loadFeedTabQuery,
+    ] = useQueryLoader<FeedTabFeedQueryType>(FeedTabFeedQuery);
 
-    const [screen, updateScreen] = useState('home');
+    const [screen, updateScreen] = useState<tabNames>('home');
 
-    const onSelectHomeTab = () => {
-        loadHomeTabQuery({});
-        updateScreen('home');
+    const tabLoaders = {
+        feed: loadFeedTabQuery,
+        home: undefined,
+        other: undefined,
     };
-    const onSelectOtherTab = () => {
-        updateScreen('other');
+
+    const selectTab = (tabName: tabNames) => () => {
+        const loader = tabLoaders[tabName];
+        if (typeof loader === 'function') {
+            loader({});
+        }
+        updateScreen(tabName);
     };
+
     return (
         <div>
             <ul>
-                <li>
-                    <button onClick={onSelectHomeTab}>Home</button>
-                </li>
-                <li>
-                    <button onClick={onSelectOtherTab}>Other</button>
-                </li>
+                {(Object.keys(tabLoaders) as tabNames[]).map((tab) => (
+                    <li key={tab}>
+                        <button onClick={selectTab(tab)}>{tab}</button>
+                    </li>
+                ))}
             </ul>
-            {screen === 'home' &&
-            homeTabQueryRef !== null &&
-            typeof homeTabQueryRef !== 'undefined' ? (
+            {screen === 'feed' &&
+            feedTabQueryRef !== null &&
+            typeof feedTabQueryRef !== 'undefined' ? (
                 <ErrorBoundary
-                    onRetry={() => loadHomeTabQuery({})}
+                    onRetry={() => loadFeedTabQuery({})}
                     fallback={({ error, retry }) => (
                         <Fragment>
                             <div>Error! {error.message}</div>
@@ -43,7 +51,7 @@ function AppTabs() {
                         </Fragment>
                     )}
                 >
-                    <HomeTab queryRef={homeTabQueryRef} />
+                    <FeedTab queryRef={feedTabQueryRef} />
                 </ErrorBoundary>
             ) : (
                 <div>Some other tab</div>

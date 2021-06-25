@@ -4,21 +4,21 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type HomeTabFeedQueryVariables = {};
-export type HomeTabFeedQueryResponse = {
+export type FeedTabFeedQueryVariables = {};
+export type FeedTabFeedQueryResponse = {
     readonly feed: ReadonlyArray<{
         readonly " $fragmentRefs": FragmentRefs<"FeedItem_link">;
     }>;
 };
-export type HomeTabFeedQuery = {
-    readonly response: HomeTabFeedQueryResponse;
-    readonly variables: HomeTabFeedQueryVariables;
+export type FeedTabFeedQuery = {
+    readonly response: FeedTabFeedQueryResponse;
+    readonly variables: FeedTabFeedQueryVariables;
 };
 
 
 
 /*
-query HomeTabFeedQuery {
+query FeedTabFeedQuery {
   feed {
     ...FeedItem_link
     id
@@ -63,7 +63,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "HomeTabFeedQuery",
+    "name": "FeedTabFeedQuery",
     "selections": [
       {
         "alias": null,
@@ -89,7 +89,7 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "HomeTabFeedQuery",
+    "name": "FeedTabFeedQuery",
     "selections": [
       {
         "alias": null,
@@ -200,14 +200,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5a820cc45ce056b5a93589453574371b",
+    "cacheID": "99e73930608eaac41aabbdfbfc001438",
     "id": null,
     "metadata": {},
-    "name": "HomeTabFeedQuery",
+    "name": "FeedTabFeedQuery",
     "operationKind": "query",
-    "text": "query HomeTabFeedQuery {\n  feed {\n    ...FeedItem_link\n    id\n  }\n}\n\nfragment FeedItem_link on Link {\n  description\n  url\n  id\n  postedBy {\n    ...UserDisplay_user\n    id\n  }\n  votes(first: 5) {\n    pageCursors {\n      totalRecords\n    }\n  }\n}\n\nfragment UserDisplay_user on User {\n  email\n  name\n  faveColour {\n    hexValue\n    id\n  }\n}\n"
+    "text": "query FeedTabFeedQuery {\n  feed {\n    ...FeedItem_link\n    id\n  }\n}\n\nfragment FeedItem_link on Link {\n  description\n  url\n  id\n  postedBy {\n    ...UserDisplay_user\n    id\n  }\n  votes(first: 5) {\n    pageCursors {\n      totalRecords\n    }\n  }\n}\n\nfragment UserDisplay_user on User {\n  email\n  name\n  faveColour {\n    hexValue\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '5e9f21bcfd39e927e76dee953513076f';
+(node as any).hash = '4aee74dabf17689593533f48549baa23';
 export default node;

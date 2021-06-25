@@ -1,19 +1,19 @@
 import React from 'react';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
-import { HomeTabFeedQuery } from '__generated__/HomeTabFeedQuery.graphql';
+import { FeedTabFeedQuery } from '__generated__/FeedTabFeedQuery.graphql';
 import FeedItem from 'FeedItem';
 
 const FeedQuery = graphql`
-    query HomeTabFeedQuery {
+    query FeedTabFeedQuery {
         feed {
             ...FeedItem_link
         }
     }
 `;
 
-function HomeTab(props: { queryRef: PreloadedQuery<HomeTabFeedQuery> }) {
-    const data = usePreloadedQuery<HomeTabFeedQuery>(FeedQuery, props.queryRef);
+function FeedTab(props: { queryRef: PreloadedQuery<FeedTabFeedQuery> }) {
+    const data = usePreloadedQuery<FeedTabFeedQuery>(FeedQuery, props.queryRef);
     return (
         <div
             style={{
@@ -28,4 +28,4 @@ function HomeTab(props: { queryRef: PreloadedQuery<HomeTabFeedQuery> }) {
     );
 }
 
-export default HomeTab;
+export default FeedTab;
