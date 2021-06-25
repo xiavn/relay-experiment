@@ -3,25 +3,12 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type HomeTabFeedQueryVariables = {};
 export type HomeTabFeedQueryResponse = {
     readonly feed: ReadonlyArray<{
-        readonly description: string | null;
-        readonly url: string | null;
-        readonly id: string;
-        readonly postedBy: {
-            readonly email: string;
-            readonly name: string;
-            readonly faveColour: {
-                readonly hexValue: string;
-            };
-        } | null;
-        readonly votes: {
-            readonly pageCursors: {
-                readonly totalRecords: number;
-            } | null;
-        } | null;
-    } | null>;
+        readonly " $fragmentRefs": FragmentRefs<"FeedItem_link">;
+    }>;
 };
 export type HomeTabFeedQuery = {
     readonly response: HomeTabFeedQueryResponse;
@@ -33,23 +20,32 @@ export type HomeTabFeedQuery = {
 /*
 query HomeTabFeedQuery {
   feed {
-    description
-    url
+    ...FeedItem_link
     id
-    postedBy {
-      email
-      name
-      faveColour {
-        hexValue
-        id
-      }
-      id
+  }
+}
+
+fragment FeedItem_link on Link {
+  description
+  url
+  id
+  postedBy {
+    ...UserDisplay_user
+    id
+  }
+  votes(first: 5) {
+    pageCursors {
+      totalRecords
     }
-    votes(first: 5) {
-      pageCursors {
-        totalRecords
-      }
-    }
+  }
+}
+
+fragment UserDisplay_user on User {
+  email
+  name
+  faveColour {
+    hexValue
+    id
   }
 }
 */
@@ -59,78 +55,8 @@ var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "description",
-  "storageKey": null
-},
-v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "url",
-  "storageKey": null
-},
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "email",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "hexValue",
-  "storageKey": null
-},
-v6 = {
-  "alias": null,
-  "args": [
-    {
-      "kind": "Literal",
-      "name": "first",
-      "value": 5
-    }
-  ],
-  "concreteType": "LinkVotes_Connection",
-  "kind": "LinkedField",
-  "name": "votes",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "PageCursors",
-      "kind": "LinkedField",
-      "name": "pageCursors",
-      "plural": false,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "totalRecords",
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
-    }
-  ],
-  "storageKey": "votes(first:5)"
 };
 return {
   "fragment": {
@@ -147,35 +73,11 @@ return {
         "name": "feed",
         "plural": true,
         "selections": [
-          (v0/*: any*/),
-          (v1/*: any*/),
-          (v2/*: any*/),
           {
-            "alias": null,
             "args": null,
-            "concreteType": "User",
-            "kind": "LinkedField",
-            "name": "postedBy",
-            "plural": false,
-            "selections": [
-              (v3/*: any*/),
-              (v4/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "Colour",
-                "kind": "LinkedField",
-                "name": "faveColour",
-                "plural": false,
-                "selections": [
-                  (v5/*: any*/)
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
-          (v6/*: any*/)
+            "kind": "FragmentSpread",
+            "name": "FeedItem_link"
+          }
         ],
         "storageKey": null
       }
@@ -197,9 +99,21 @@ return {
         "name": "feed",
         "plural": true,
         "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "description",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "url",
+            "storageKey": null
+          },
           (v0/*: any*/),
-          (v1/*: any*/),
-          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -208,8 +122,20 @@ return {
             "name": "postedBy",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
-              (v4/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "email",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "name",
+                "storageKey": null
+              },
               {
                 "alias": null,
                 "args": null,
@@ -218,30 +144,70 @@ return {
                 "name": "faveColour",
                 "plural": false,
                 "selections": [
-                  (v5/*: any*/),
-                  (v2/*: any*/)
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "hexValue",
+                    "storageKey": null
+                  },
+                  (v0/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v2/*: any*/)
+              (v0/*: any*/)
             ],
             "storageKey": null
           },
-          (v6/*: any*/)
+          {
+            "alias": null,
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "first",
+                "value": 5
+              }
+            ],
+            "concreteType": "LinkVotes_Connection",
+            "kind": "LinkedField",
+            "name": "votes",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "PageCursors",
+                "kind": "LinkedField",
+                "name": "pageCursors",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "totalRecords",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "votes(first:5)"
+          }
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "54aaebfb5cc0d77620215911406d45d6",
+    "cacheID": "5a820cc45ce056b5a93589453574371b",
     "id": null,
     "metadata": {},
     "name": "HomeTabFeedQuery",
     "operationKind": "query",
-    "text": "query HomeTabFeedQuery {\n  feed {\n    description\n    url\n    id\n    postedBy {\n      email\n      name\n      faveColour {\n        hexValue\n        id\n      }\n      id\n    }\n    votes(first: 5) {\n      pageCursors {\n        totalRecords\n      }\n    }\n  }\n}\n"
+    "text": "query HomeTabFeedQuery {\n  feed {\n    ...FeedItem_link\n    id\n  }\n}\n\nfragment FeedItem_link on Link {\n  description\n  url\n  id\n  postedBy {\n    ...UserDisplay_user\n    id\n  }\n  votes(first: 5) {\n    pageCursors {\n      totalRecords\n    }\n  }\n}\n\nfragment UserDisplay_user on User {\n  email\n  name\n  faveColour {\n    hexValue\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '5ee7fa3e62e84c6d787e1c39ad8cfcde';
+(node as any).hash = '5e9f21bcfd39e927e76dee953513076f';
 export default node;
