@@ -23,8 +23,9 @@ const PaginationWrapper = ({
     return (
         <div style={{ border: '2px solid darkcyan', background: 'azure' }}>
             {first && <PageButton number={first.page} />}
-            {around.length && around.map(page => <PageButton number={page.page})}
-            {last && <PageButton number={last.page}}
+            {around.length &&
+                around.map((page) => <PageButton number={page.page} />)}
+            {last && <PageButton number={last.page} />}
         </div>
     );
 };
