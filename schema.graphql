@@ -1,217 +1,202 @@
-"""
-Exposes a URL that specifies the behaviour of this scalar.
-"""
-directive @specifiedBy(
-    """
-    The URL that specifies the behaviour of this scalar.
-    """
-    url: String!
-) on SCALAR
-
-type AuthPayload {
-    token: String
-    user: User
-}
-
-type Colour implements Node {
-    id: ID!
-    localId: Int!
-    name: String!
-    year: Int!
-    hexValue: String!
-    pantoneValue: String!
+interface Node {
+  id: ID!
 }
 
 type Link implements Node {
-    id: ID!
-    internalId: Int!
-    description: String
-    url: String
-    postedBy: User
-    votes(
-        """
-        Returns the first n elements from the list.
-        """
-        first: Int
+  id: ID!
+  internalId: Int!
+  description: String
+  url: String
+  postedBy: User
+  votes(
+    """Returns the first n elements from the list."""
+    first: Int
 
-        """
-        Returns the elements in the list that come after the specified cursor
-        """
-        after: String
+    """Returns the elements in the list that come after the specified cursor"""
+    after: String
 
-        """
-        Returns the last n elements from the list.
-        """
-        last: Int
+    """Returns the last n elements from the list."""
+    last: Int
 
-        """
-        Returns the elements in the list that come before the specified cursor
-        """
-        before: String
-    ): LinkVotes_Connection
+    """Returns the elements in the list that come before the specified cursor"""
+    before: String
+  ): LinkVotes_Connection
 }
 
-type LinkEdge {
-    """
-    https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor
-    """
-    cursor: String!
+type User implements Node {
+  id: ID!
+  name: String!
+  email: String!
+  faveColour: Colour!
+  links(
+    """Returns the first n elements from the list."""
+    first: Int
 
-    """
-    https://facebook.github.io/relay/graphql/connections.htm#sec-Node
-    """
-    node: Link
+    """Returns the elements in the list that come after the specified cursor"""
+    after: String
+
+    """Returns the last n elements from the list."""
+    last: Int
+
+    """Returns the elements in the list that come before the specified cursor"""
+    before: String
+  ): UserLinks_Connection!
 }
 
-type LinkVotes_Connection {
-    """
-    https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
-    """
-    edges: [VoteEdge]
-
-    """
-    https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
-    """
-    pageInfo: PageInfo!
-    pageCursors: PageCursors
+type AuthPayload {
+  token: String
+  user: User
 }
 
-type Mutation {
-    createLink(url: String!, description: String!): Link!
-    updateLink(id: ID!, url: String, description: String): Link!
-    deleteLink(id: ID!): Link!
-    editUser(name: String, faveColour: Int): User!
-    signup(
-        email: String!
-        password: String!
-        name: String!
-        faveColour: Int
-    ): AuthPayload
-    addVote(linkId: Int!): Vote
-}
-
-interface Node {
-    id: ID!
+type Vote implements Node {
+  id: ID!
+  link: Link
+  user: User
 }
 
 type PageCursor {
-    cursor: String!
-    page: Int!
-    isCurrent: Boolean!
+  cursor: String!
+  page: Int!
+  isCurrent: Boolean!
 }
 
 type PageCursors {
-    """
-    Optional, may be included in `around` (if current page is near the beginning).
-    """
-    first: PageCursor
+  """
+  Optional, may be included in `around` (if current page is near the beginning).
+  """
+  first: PageCursor
 
-    """
-    Optional, may be included in `around` (if current page is near the end).
-    """
-    last: PageCursor
+  """
+  Optional, may be included in `around` (if current page is near the end).
+  """
+  last: PageCursor
 
-    """
-    Always includes current page
-    """
-    around: [PageCursor!]!
-    previous: PageCursor
-    totalRecords: Int!
+  """Always includes current page"""
+  around: [PageCursor!]!
+  previous: PageCursor
+  totalRecords: Int!
+}
+
+type Colour implements Node {
+  id: ID!
+  localId: Int!
+  name: String!
+  year: Int!
+  hexValue: String!
+  pantoneValue: String!
+}
+
+type LinkVotes_Connection {
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
+  """
+  edges: [VoteEdge]
+
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+  """
+  pageInfo: PageInfo!
+  pageCursors: PageCursors
+}
+
+type VoteEdge {
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor"""
+  cursor: String!
+
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
+  node: Vote
 }
 
 """
 PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
 """
 type PageInfo {
-    """
-    Used to indicate whether more edges exist following the set defined by the clients arguments.
-    """
-    hasNextPage: Boolean!
+  """
+  Used to indicate whether more edges exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
 
-    """
-    Used to indicate whether more edges exist prior to the set defined by the clients arguments.
-    """
-    hasPreviousPage: Boolean!
+  """
+  Used to indicate whether more edges exist prior to the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
 
-    """
-    The cursor corresponding to the first nodes in edges. Null if the connection is empty.
-    """
-    startCursor: String
+  """
+  The cursor corresponding to the first nodes in edges. Null if the connection is empty.
+  """
+  startCursor: String
 
-    """
-    The cursor corresponding to the last nodes in edges. Null if the connection is empty.
-    """
-    endCursor: String
+  """
+  The cursor corresponding to the last nodes in edges. Null if the connection is empty.
+  """
+  endCursor: String
 }
 
-type Query {
-    node(id: ID!): Node
-    feed: [Link]!
-    link(id: Int!): Link
-    login(email: String!, password: String!): AuthPayload
-    colours: [Colour]!
+type QueryLinks_Connection {
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
+  """
+  edges: [LinkEdge]
+
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+  """
+  pageInfo: PageInfo!
+  pageCursors: PageCursors
 }
 
-type Subscription {
-    newLink: Link
-    newVote: Vote
-}
+type LinkEdge {
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor"""
+  cursor: String!
 
-type User implements Node {
-    id: ID!
-    name: String!
-    email: String!
-    faveColour: Colour!
-    links(
-        """
-        Returns the first n elements from the list.
-        """
-        first: Int
-
-        """
-        Returns the elements in the list that come after the specified cursor
-        """
-        after: String
-
-        """
-        Returns the last n elements from the list.
-        """
-        last: Int
-
-        """
-        Returns the elements in the list that come before the specified cursor
-        """
-        before: String
-    ): UserLinks_Connection!
+  """https://facebook.github.io/relay/graphql/connections.htm#sec-Node"""
+  node: Link
 }
 
 type UserLinks_Connection {
-    """
-    https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
-    """
-    edges: [LinkEdge]
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-Edge-Types
+  """
+  edges: [LinkEdge]
 
-    """
-    https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
-    """
-    pageInfo: PageInfo!
-    pageCursors: PageCursors
+  """
+  https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+  """
+  pageInfo: PageInfo!
+  pageCursors: PageCursors
 }
 
-type Vote implements Node {
-    id: ID!
-    link: Link
-    user: User
+type Query {
+  node(id: ID!): Node
+  links(
+    """Returns the first n elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come after the specified cursor"""
+    after: String
+
+    """Returns the last n elements from the list."""
+    last: Int
+
+    """Returns the elements in the list that come before the specified cursor"""
+    before: String
+  ): QueryLinks_Connection
+  feed: [Link!]!
+  link(id: Int!): Link
+  login(email: String!, password: String!): AuthPayload
+  colours: [Colour]!
 }
 
-type VoteEdge {
-    """
-    https://facebook.github.io/relay/graphql/connections.htm#sec-Cursor
-    """
-    cursor: String!
+type Mutation {
+  createLink(url: String!, description: String!): Link!
+  updateLink(id: ID!, url: String, description: String): Link!
+  deleteLink(id: ID!): Link!
+  editUser(name: String, faveColour: Int): User!
+  signup(email: String!, password: String!, name: String!, faveColour: Int): AuthPayload
+  addVote(linkId: Int!): Vote
+}
 
-    """
-    https://facebook.github.io/relay/graphql/connections.htm#sec-Node
-    """
-    node: Vote
+type Subscription {
+  newLink: Link
+  newVote: Vote
 }
