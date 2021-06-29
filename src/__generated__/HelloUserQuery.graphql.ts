@@ -4,15 +4,11 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type HelloUserQueryVariables = {
-    email: string;
-    password: string;
+    id: number;
 };
 export type HelloUserQueryResponse = {
-    readonly login: {
-        readonly token: string | null;
-        readonly user: {
-            readonly name: string;
-        } | null;
+    readonly user: {
+        readonly name: string;
     } | null;
 };
 export type HelloUserQuery = {
@@ -24,15 +20,11 @@ export type HelloUserQuery = {
 
 /*
 query HelloUserQuery(
-  $email: String!
-  $password: String!
+  $id: Int!
 ) {
-  login(email: $email, password: $password) {
-    token
-    user {
-      name
-      id
-    }
+  user(id: $id) {
+    name
+    id
   }
 }
 */
@@ -42,34 +34,17 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "email"
-  },
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "password"
+    "name": "id"
   }
 ],
 v1 = [
   {
     "kind": "Variable",
-    "name": "email",
-    "variableName": "email"
-  },
-  {
-    "kind": "Variable",
-    "name": "password",
-    "variableName": "password"
+    "name": "id",
+    "variableName": "id"
   }
 ],
 v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "token",
-  "storageKey": null
-},
-v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -86,24 +61,12 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "AuthPayload",
+        "concreteType": "User",
         "kind": "LinkedField",
-        "name": "login",
+        "name": "user",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "User",
-            "kind": "LinkedField",
-            "name": "user",
-            "plural": false,
-            "selections": [
-              (v3/*: any*/)
-            ],
-            "storageKey": null
-          }
+          (v2/*: any*/)
         ],
         "storageKey": null
       }
@@ -120,29 +83,17 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "AuthPayload",
+        "concreteType": "User",
         "kind": "LinkedField",
-        "name": "login",
+        "name": "user",
         "plural": false,
         "selections": [
           (v2/*: any*/),
           {
             "alias": null,
             "args": null,
-            "concreteType": "User",
-            "kind": "LinkedField",
-            "name": "user",
-            "plural": false,
-            "selections": [
-              (v3/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              }
-            ],
+            "kind": "ScalarField",
+            "name": "id",
             "storageKey": null
           }
         ],
@@ -151,14 +102,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6c2a366300f948b188666d35701d8756",
+    "cacheID": "06d1734d2c4e4a24e431fc5ffada832d",
     "id": null,
     "metadata": {},
     "name": "HelloUserQuery",
     "operationKind": "query",
-    "text": "query HelloUserQuery(\n  $email: String!\n  $password: String!\n) {\n  login(email: $email, password: $password) {\n    token\n    user {\n      name\n      id\n    }\n  }\n}\n"
+    "text": "query HelloUserQuery(\n  $id: Int!\n) {\n  user(id: $id) {\n    name\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '9b002b53d6514c76e00ddfbaece0dfcc';
+(node as any).hash = 'bc8cdd8e5cc86dd5eab6d4d82eb945c8';
 export default node;

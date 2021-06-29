@@ -1,20 +1,26 @@
 import React from 'react';
 import graphql from 'babel-plugin-relay/macro';
-import { PreloadedQuery } from 'react-relay';
+import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { HelloUserQuery } from '__generated__/HelloUserQuery.graphql';
 
-const HelloUserQuery = graphql`
-    query HelloUserQuery($email: String!, $password: String!) {
-        login(email: $email, password: $password) {
-            token
-            user {
+const NameQuery = graphql`
+    query HelloUserQuery($id: ID!) {
+        node(id: $id) {
+            id
+            ... on User {
                 name
             }
         }
     }
 `;
 
-const HelloUser = ({ queryRef }: PreloadedQuery) => {
-    return <div>Hello </div>;
+const HelloUser = ({
+    queryRef,
+}: {
+    queryRef: PreloadedQuery<HelloUserQuery>;
+}) => {
+    const data = usePreloadedQuery<HelloUserQuery>(NameQuery, queryRef);
+    return <div>Hello {data.user?.name}</div>;
 };
 
 export default HelloUser;

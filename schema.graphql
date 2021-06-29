@@ -183,6 +183,7 @@ type Query {
   ): QueryLinks_Connection
   feed: [Link!]!
   link(id: Int!): Link
+  user(id: Int!): User
   login(email: String!, password: String!): AuthPayload
   colours: [Colour]!
 }
