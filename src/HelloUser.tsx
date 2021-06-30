@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import graphql from 'babel-plugin-relay/macro';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { HelloUserQuery } from '__generated__/HelloUserQuery.graphql';
@@ -20,7 +20,7 @@ const HelloUser = ({
     queryRef: PreloadedQuery<HelloUserQuery>;
 }) => {
     const data = usePreloadedQuery<HelloUserQuery>(NameQuery, queryRef);
-    return <div>Hello {data.node?.name}</div>;
+    return <div>Hello {data.node?.name} </div>;
 };
 
 export default HelloUser;

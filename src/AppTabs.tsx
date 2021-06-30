@@ -1,7 +1,7 @@
 import ErrorBoundary from 'ErrorBoundary';
 import FeedTab from 'FeedTab';
 import React, { Fragment, useEffect, useState } from 'react';
-import { useQueryLoader } from 'react-relay';
+import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import FeedTabFeedQuery, {
     FeedTabFeedQuery as FeedTabFeedQueryType,
@@ -9,25 +9,36 @@ import FeedTabFeedQuery, {
 import HelloUserQuery, {
     HelloUserQuery as HelloUserQueryType,
 } from '__generated__/HelloUserQuery.graphql';
+import { AppTabsQuery as AppTabsQueryType } from '__generated__/AppTabsQuery.graphql';
 import { readUserData } from 'authentication';
 import HelloUser from 'HelloUser';
-import { type } from 'os';
 import LogInForm from 'LogInForm';
+import UserInfo from 'UserInfo';
 
 type tabNames = 'home' | 'feed' | 'other';
 
-// const AppQuery = graphql`
-//     query AppTabsQuery($email: String!, $password: String!) {
-//         login(email: $email, password: $password) {
-//             token
-//             user {
-//                 name
-//             }
-//         }
-//     }
-// `;
+const rootQuery = graphql`
+    query AppTabsQuery {
+        currentUser {
+            token
+            user {
+                id
+                name
+            }
+        }
+    }
+`;
 
-function AppTabs() {
+function AppTabs({
+    initialQueryRef,
+}: {
+    initialQueryRef: PreloadedQuery<AppTabsQueryType>;
+}) {
+    const data = usePreloadedQuery<AppTabsQueryType>(
+        rootQuery,
+        initialQueryRef,
+    );
+
     const [
         feedTabQueryRef,
         loadFeedTabQuery,
@@ -83,7 +94,7 @@ function AppTabs() {
             {screen === 'home' && (
                 <div>
                     <h2>Home</h2>
-                    <LogInForm />
+                    {userData !== null ? <UserInfo /> : <LogInForm />}
                 </div>
             )}
             {screen === 'feed' &&

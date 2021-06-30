@@ -1,12 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import graphql from 'babel-plugin-relay/macro';
+import { useMutation } from 'react-relay';
+import { LogInFormMutation } from '__generated__/LogInFormMutation.graphql';
+import { saveUserData } from 'authentication';
 
-const logInQuery = graphql`
-    query LogInFormQuery($email: String!, $password: String!) {
+const logInMutation = graphql`
+    mutation LogInFormMutation($email: String!, $password: String!) {
         login(email: $email, password: $password) {
             token
             user {
                 id
+                name
             }
         }
     }
@@ -15,11 +19,25 @@ const logInQuery = graphql`
 const LogInForm = () => {
     const [email, updateEmail] = useState<string>('');
     const [password, updatePassword] = useState<string>('');
+    const [commit, isInFlight] = useMutation<LogInFormMutation>(logInMutation);
     const handleSubmit = useCallback(
         (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
+            commit({
+                variables: {
+                    email,
+                    password,
+                },
+                onCompleted(data) {
+                    const id = data.login?.user?.id;
+                    const token = data.login?.token;
+                    if (id && token) {
+                        saveUserData(id, token);
+                    }
+                },
+            });
         },
-        [],
+        [email, password, commit],
     );
     return (
         <form onSubmit={handleSubmit}>
@@ -44,7 +62,9 @@ const LogInForm = () => {
                 value={password}
             />
             <br />
-            <button type="submit">Submit</button>
+            <button type="submit" disabled={isInFlight}>
+                Submit
+            </button>
         </form>
     );
 };
