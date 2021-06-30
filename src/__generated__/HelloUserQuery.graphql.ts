@@ -4,11 +4,12 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type HelloUserQueryVariables = {
-    id: number;
+    id: string;
 };
 export type HelloUserQueryResponse = {
-    readonly user: {
-        readonly name: string;
+    readonly node: {
+        readonly id: string;
+        readonly name?: string;
     } | null;
 };
 export type HelloUserQuery = {
@@ -20,11 +21,14 @@ export type HelloUserQuery = {
 
 /*
 query HelloUserQuery(
-  $id: Int!
+  $id: ID!
 ) {
-  user(id: $id) {
-    name
+  node(id: $id) {
+    __typename
     id
+    ... on User {
+      name
+    }
   }
 }
 */
@@ -48,8 +52,22 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "name",
+  "name": "id",
   "storageKey": null
+},
+v3 = {
+  "kind": "InlineFragment",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    }
+  ],
+  "type": "User",
+  "abstractKey": null
 };
 return {
   "fragment": {
@@ -61,12 +79,13 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "User",
+        "concreteType": null,
         "kind": "LinkedField",
-        "name": "user",
+        "name": "node",
         "plural": false,
         "selections": [
-          (v2/*: any*/)
+          (v2/*: any*/),
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
@@ -83,33 +102,34 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "concreteType": "User",
+        "concreteType": null,
         "kind": "LinkedField",
-        "name": "user",
+        "name": "node",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "id",
+            "name": "__typename",
             "storageKey": null
-          }
+          },
+          (v2/*: any*/),
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "06d1734d2c4e4a24e431fc5ffada832d",
+    "cacheID": "f7dd2d529791889380bc517298a1bd17",
     "id": null,
     "metadata": {},
     "name": "HelloUserQuery",
     "operationKind": "query",
-    "text": "query HelloUserQuery(\n  $id: Int!\n) {\n  user(id: $id) {\n    name\n    id\n  }\n}\n"
+    "text": "query HelloUserQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on User {\n      name\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'bc8cdd8e5cc86dd5eab6d4d82eb945c8';
+(node as any).hash = '05461600998e0a44fc3ee210f8d92c6c';
 export default node;

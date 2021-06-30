@@ -20,7 +20,7 @@ const HelloUser = ({
     queryRef: PreloadedQuery<HelloUserQuery>;
 }) => {
     const data = usePreloadedQuery<HelloUserQuery>(NameQuery, queryRef);
-    return <div>Hello {data.user?.name}</div>;
+    return <div>Hello {data.node?.name}</div>;
 };
 
 export default HelloUser;
