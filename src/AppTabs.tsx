@@ -1,16 +1,12 @@
 import ErrorBoundary from 'ErrorBoundary';
 import FeedTab from 'FeedTab';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import FeedTabFeedQuery, {
     FeedTabFeedQuery as FeedTabFeedQueryType,
 } from '__generated__/FeedTabFeedQuery.graphql';
-import HelloUserQuery, {
-    HelloUserQuery as HelloUserQueryType,
-} from '__generated__/HelloUserQuery.graphql';
 import { AppTabsQuery as AppTabsQueryType } from '__generated__/AppTabsQuery.graphql';
-import { readUserData } from 'authentication';
 import HelloUser from 'HelloUser';
 import LogInForm from 'LogInForm';
 import UserInfo from 'UserInfo';
@@ -23,7 +19,7 @@ const rootQuery = graphql`
             token
             user {
                 id
-                name
+                ...HelloUser_user
             }
         }
     }
@@ -34,7 +30,7 @@ function AppTabs({
 }: {
     initialQueryRef: PreloadedQuery<AppTabsQueryType>;
 }) {
-    const data = usePreloadedQuery<AppTabsQueryType>(
+    const { currentUser } = usePreloadedQuery<AppTabsQueryType>(
         rootQuery,
         initialQueryRef,
     );
@@ -43,13 +39,6 @@ function AppTabs({
         feedTabQueryRef,
         loadFeedTabQuery,
     ] = useQueryLoader<FeedTabFeedQueryType>(FeedTabFeedQuery);
-
-    const [
-        helloUserQueryRef,
-        loadHelloUserQuery,
-    ] = useQueryLoader<HelloUserQueryType>(HelloUserQuery);
-
-    const userData = readUserData();
 
     const [screen, updateScreen] = useState<tabNames>('home');
 
@@ -76,25 +65,13 @@ function AppTabs({
                     </li>
                 ))}
             </ul>
-            {userData !== null &&
-                helloUserQueryRef !== null &&
-                typeof helloUserQueryRef !== 'undefined' && (
-                    <ErrorBoundary
-                        onRetry={() => loadHelloUserQuery({ id: userData.id })}
-                        fallback={({ error, retry }) => (
-                            <Fragment>
-                                <div>😦 {error.message}</div>
-                                <button onClick={retry}>Retry</button>
-                            </Fragment>
-                        )}
-                    >
-                        <HelloUser queryRef={helloUserQueryRef} />
-                    </ErrorBoundary>
-                )}
+            {currentUser && currentUser.user && (
+                <HelloUser user={currentUser.user} />
+            )}
             {screen === 'home' && (
                 <div>
                     <h2>Home</h2>
-                    {userData !== null ? <UserInfo /> : <LogInForm />}
+                    {currentUser?.user ? <UserInfo /> : <LogInForm />}
                 </div>
             )}
             {screen === 'feed' &&

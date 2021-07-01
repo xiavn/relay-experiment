@@ -3,13 +3,14 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+import { FragmentRefs } from "relay-runtime";
 export type AppTabsQueryVariables = {};
 export type AppTabsQueryResponse = {
     readonly currentUser: {
         readonly token: string | null;
         readonly user: {
             readonly id: string;
-            readonly name: string;
+            readonly " $fragmentRefs": FragmentRefs<"HelloUser_user">;
         } | null;
     } | null;
 };
@@ -26,65 +27,68 @@ query AppTabsQuery {
     token
     user {
       id
-      name
+      ...HelloUser_user
     }
   }
+}
+
+fragment HelloUser_user on User {
+  name
 }
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "AuthPayload",
-    "kind": "LinkedField",
-    "name": "currentUser",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "token",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "User",
-        "kind": "LinkedField",
-        "name": "user",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "name",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "token",
+  "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "AppTabsQuery",
-    "selections": (v0/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "AuthPayload",
+        "kind": "LinkedField",
+        "name": "currentUser",
+        "plural": false,
+        "selections": [
+          (v0/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "User",
+            "kind": "LinkedField",
+            "name": "user",
+            "plural": false,
+            "selections": [
+              (v1/*: any*/),
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "HelloUser_user"
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Query",
     "abstractKey": null
   },
@@ -93,17 +97,49 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "AppTabsQuery",
-    "selections": (v0/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "AuthPayload",
+        "kind": "LinkedField",
+        "name": "currentUser",
+        "plural": false,
+        "selections": [
+          (v0/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "User",
+            "kind": "LinkedField",
+            "name": "user",
+            "plural": false,
+            "selections": [
+              (v1/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "name",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "b160680372348d318e5684e21e402dd4",
+    "cacheID": "aeb4a8ca5dd7fb79296fd5e01a4e8e1f",
     "id": null,
     "metadata": {},
     "name": "AppTabsQuery",
     "operationKind": "query",
-    "text": "query AppTabsQuery {\n  currentUser {\n    token\n    user {\n      id\n      name\n    }\n  }\n}\n"
+    "text": "query AppTabsQuery {\n  currentUser {\n    token\n    user {\n      id\n      ...HelloUser_user\n    }\n  }\n}\n\nfragment HelloUser_user on User {\n  name\n}\n"
   }
 };
 })();
-(node as any).hash = '576eaf25b02cd517d7d1c4eb61e3bac4';
+(node as any).hash = '0f279986dac656e5abbec74d1a7b5ac3';
 export default node;

@@ -1,26 +1,17 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import graphql from 'babel-plugin-relay/macro';
-import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { HelloUserQuery } from '__generated__/HelloUserQuery.graphql';
+import { useFragment } from 'react-relay';
+import { HelloUser_user$key } from '__generated__/HelloUser_user.graphql';
 
 const NameQuery = graphql`
-    query HelloUserQuery($id: ID!) {
-        node(id: $id) {
-            id
-            ... on User {
-                name
-            }
-        }
+    fragment HelloUser_user on User {
+        name
     }
 `;
 
-const HelloUser = ({
-    queryRef,
-}: {
-    queryRef: PreloadedQuery<HelloUserQuery>;
-}) => {
-    const data = usePreloadedQuery<HelloUserQuery>(NameQuery, queryRef);
-    return <div>Hello {data.node?.name} </div>;
+const HelloUser = ({ user }: { user: HelloUser_user$key }) => {
+    const data = useFragment(NameQuery, user);
+    return <div>Hello {data.name} </div>;
 };
 
 export default HelloUser;
