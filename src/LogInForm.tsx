@@ -31,7 +31,6 @@ const LogInForm = () => {
                 onCompleted(data) {
                     const id = data.login?.user?.id;
                     const token = data.login?.token;
-                    console.log(2);
                     if (id && token) {
                         saveUserData(id, token);
                     }
