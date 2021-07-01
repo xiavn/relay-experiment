@@ -1,13 +1,20 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { removeUserData } from 'authentication';
+import { commitLocalUpdate } from 'react-relay';
+import RelayEnvironment from 'relay-environment';
+
+const removeCurrentUser = () => {
+    removeUserData();
+    commitLocalUpdate(RelayEnvironment, (store) => {
+        store.getRoot().invalidateRecord();
+        store.getRoot().setValue(null, 'currentUser');
+    });
+};
 
 const UserInfo = () => {
-    const handleSignOut = useCallback(() => {
-        removeUserData();
-    }, []);
     return (
         <div>
-            <button onClick={handleSignOut}>Sign Out</button>
+            <button onClick={removeCurrentUser}>Sign Out</button>
         </div>
     );
 };
