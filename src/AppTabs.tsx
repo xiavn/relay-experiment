@@ -34,7 +34,6 @@ function AppTabs({
         rootQuery,
         initialQueryRef,
     );
-
     const [
         feedTabQueryRef,
         loadFeedTabQuery,

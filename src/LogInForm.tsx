@@ -31,9 +31,14 @@ const LogInForm = () => {
                 onCompleted(data) {
                     const id = data.login?.user?.id;
                     const token = data.login?.token;
+                    console.log(2);
                     if (id && token) {
                         saveUserData(id, token);
                     }
+                },
+                updater(store) {
+                    const payload = store.getRootField('login');
+                    store.getRoot().setLinkedRecord(payload, 'currentUser');
                 },
             });
         },
