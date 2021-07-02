@@ -8,8 +8,8 @@ import FeedTabFeedQuery, {
 } from '__generated__/FeedTabFeedQuery.graphql';
 import { AppTabsQuery as AppTabsQueryType } from '__generated__/AppTabsQuery.graphql';
 import HelloUser from 'HelloUser';
-import LogInForm from 'LogInForm';
 import UserInfo from 'UserInfo';
+import HomeTab from 'HomeTab';
 
 type tabNames = 'home' | 'feed' | 'other';
 
@@ -70,7 +70,7 @@ function AppTabs({
             {screen === 'home' && (
                 <div>
                     <h2>Home</h2>
-                    {currentUser?.user ? <UserInfo /> : <LogInForm />}
+                    {currentUser?.user ? <UserInfo /> : <HomeTab />}
                 </div>
             )}
             {screen === 'feed' &&
