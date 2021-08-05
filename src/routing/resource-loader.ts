@@ -1,3 +1,5 @@
+import { FC, FunctionComponent } from 'react';
+
 /**
  * A cache of resources to avoid loading the same module twice. This is important
  * because Webpack dynamic imports only expose an asynchronous API for loading
@@ -6,34 +8,72 @@
  */
 const resourceMap = new Map();
 
-type loaderFunction = () => Promise<{ default: () => JSX.Element }>;
+type componentPromise = Promise<FunctionComponent>;
+
+type loaderFunction = () => Promise<{ default: FunctionComponent }>;
 
 /**
  * A generic resource: given some method to asynchronously load a value - the loader()
  * argument - it allows accessing the state of the resource.
  */
-class Resource {
-    error: null;
-    loader: loaderFunction;
-    promise: null;
-    result: () => JSX.Element || null;
+export class Resource {
+    _error: null;
+    _loader: loaderFunction;
+    _promise: componentPromise | null;
+    _result: FunctionComponent | null;
 
     constructor(loader: loaderFunction) {
-        this.error = null;
-        this.loader = loader;
-        this.promise = null;
-        this.result = null;
+        this._error = null;
+        this._loader = loader;
+        this._promise = null;
+        this._result = null;
     }
 
     /**
      * Loads the resource if necessary.
      */
     load() {
-        let promise = this.promise;
+        let promise = this._promise;
         if (promise === null) {
-            promise = this.loader().then((result) => {
-                this.result = result.default;
-            });
+            promise = this._loader()
+                .then((result) => {
+                    this._result = result.default;
+                    return result.default;
+                })
+                .catch((error) => {
+                    this._error = error;
+                    throw error;
+                });
+            this._promise = promise;
+        }
+        return promise;
+    }
+
+    /**
+     * Returns the result, if available. This can be useful to check if the value
+     * is resolved yet.
+     */
+    get() {
+        if (this._result !== null) {
+            return this._result;
+        }
+    }
+
+    /**
+     * This is the key method for integrating with React Suspense. Read will:
+     * - Return the data of the resource if available.
+     * - Throw an error if the resource failed to load.
+     * - "Suspend" if the resource is still pending (currently implemented as
+     *   throwing a Promise, though this is subject to change in future
+     *   versions of React)
+     */
+    read() {
+        if (this._result !== null) {
+            return this._result;
+        } else if (this._error !== null) {
+            throw this._error;
+        } else {
+            throw this._promise;
         }
     }
 }
@@ -55,7 +95,7 @@ class Resource {
  * @param {*} moduleId A globally unique identifier for the resource used for caching
  * @param {*} loader A method to load the resource's data if necessary
  */
-const resourceLoader = (moduleId: string, loader) => {
+const resourceLoader = (moduleId: string, loader: loaderFunction) => {
     let resource = resourceMap.get(moduleId);
     if (typeof resource === 'undefined' || resource === null) {
         const resource = new Resource(loader);
