@@ -17,6 +17,8 @@ interface PreloadableRouteConfig extends RouteConfig {
 
 type subscriptionCallback = (entry: { location: Location, entries: { component: Resource, prepared: PreparedData, routeData: match<{}> }[]) => void;
 
+export type RouterContextType = ReturnType<typeof createRouter>['context'];
+
 /**
  * Match the current location to the corresponding route entry.
  */
