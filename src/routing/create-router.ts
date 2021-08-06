@@ -10,12 +10,16 @@ import { Resource } from './resource-loader';
 interface PreparedData {
     [key: string]: any;
 }
-interface PreloadableRouteConfig extends RouteConfig {
+export interface PreloadableRouteConfig extends RouteConfig {
     prepare?: (params: {[key: string]: string }) => PreparedData;
     preloadComponent: Resource;
 }
 
-type subscriptionCallback = (entry: { location: Location, entries: { component: Resource, prepared: PreparedData, routeData: match<{}> }[]) => void;
+export interface SubscriptionEntry {
+    component: Resource, prepared: PreparedData, routeData: match<{}>
+}
+
+type subscriptionCallback = (entry: { location: Location, entries: SubscriptionEntry[]) => void;
 
 export type RouterContextType = ReturnType<typeof createRouter>['context'];
 
