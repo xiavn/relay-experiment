@@ -16,7 +16,7 @@ export interface PreloadableRouteConfig extends RouteConfig {
 }
 
 export interface SubscriptionEntry {
-    component: Resource, prepared: PreparedData, routeData: match<{}>
+    component: Resource, prepared: PreparedData | undefined, routeData: match<{}>
 }
 
 type subscriptionCallback = (entry: { location: Location, entries: SubscriptionEntry[]) => void;

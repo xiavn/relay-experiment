@@ -1,5 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { PreloadableRouteConfig } from './create-router';
+import ErrorBoundary from './ErrorBoundary';
+import nestRoutes from './nest-routes';
 import RouterContext from './RouterContext';
 
 /**
@@ -48,7 +50,14 @@ const RouterRender = () => {
         // component, and iteratively construct parent components w the previous
         // value as the child of the next one:
         const reversedItems = [...routeEntry.entries].reverse();
-        const firstItem = reversedItems[0];
+        const routes = nestRoutes(reversedItems);
+        // Routes can error so wrap in an <ErrorBoundary>
+        // Routes can suspend, so wrap in <Suspense>
+        return (
+            <ErrorBoundary>
+                <Suspense fallback={'Loading...'}>{routes}</Suspense>
+            </ErrorBoundary>
+        );
     }
 };
 
