@@ -10,6 +10,7 @@ import { AppTabsQuery as AppTabsQueryType } from '__generated__/AppTabsQuery.gra
 import HelloUser from 'HelloUser';
 import UserInfo from 'UserInfo';
 import HomeTab from 'HomeTab';
+import { useHistory } from 'routing';
 
 type tabNames = 'home' | 'feed' | 'other';
 
@@ -41,6 +42,8 @@ function AppTabs({ prepared: { initialQueryRef } }: AppTabsProps) {
 
     const [screen, updateScreen] = useState<tabNames>('home');
 
+    const history = useHistory();
+
     const tabLoaders = {
         feed: loadFeedTabQuery,
         home: undefined,
@@ -52,7 +55,8 @@ function AppTabs({ prepared: { initialQueryRef } }: AppTabsProps) {
         if (typeof loader === 'function') {
             loader({});
         }
-        updateScreen(tabName);
+        // updateScreen(tabName);
+        history?.push(`/${tabName}`);
     };
 
     return (
