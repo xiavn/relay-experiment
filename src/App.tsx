@@ -1,17 +1,12 @@
 import AppTabs from 'AppTabs';
 import React, { Suspense } from 'react';
-import { loadQuery, RelayEnvironmentProvider } from 'react-relay/hooks';
+import { RelayEnvironmentProvider } from 'react-relay/hooks';
+import { createRouter } from 'routing';
+import routes from 'routes';
 import './App.css';
 import RelayEnvironment from './relay-environment';
-import AppTabsQuery, {
-    AppTabsQuery as AppTabsQueryType,
-} from '__generated__/AppTabsQuery.graphql';
 
-const initialQueryRef = loadQuery<AppTabsQueryType>(
-    RelayEnvironment,
-    AppTabsQuery,
-    {},
-);
+const router = createRouter(routes);
 
 // The above component needs to know how to access the Relay environment, and we
 // need to specify a fallback in case it suspends:

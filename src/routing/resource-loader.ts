@@ -8,9 +8,9 @@ import { FC, FunctionComponent } from 'react';
  */
 const resourceMap = new Map();
 
-type componentPromise = Promise<FunctionComponent>;
+export type GenericComponent = any;
 
-type loaderFunction = () => Promise<{ default: FunctionComponent }>;
+type loaderFunction = () => Promise<{ default: GenericComponent }>;
 
 /**
  * A generic resource: given some method to asynchronously load a value - the loader()
@@ -19,7 +19,7 @@ type loaderFunction = () => Promise<{ default: FunctionComponent }>;
 export class Resource {
     _error: null;
     _loader: loaderFunction;
-    _promise: componentPromise | null;
+    _promise: Promise<GenericComponent> | null;
     _result: FunctionComponent | null;
 
     constructor(loader: loaderFunction) {

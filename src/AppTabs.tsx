@@ -25,11 +25,11 @@ const rootQuery = graphql`
     }
 `;
 
-function AppTabs({
-    initialQueryRef,
-}: {
+export interface AppTabsProps {
     initialQueryRef: PreloadedQuery<AppTabsQueryType>;
-}) {
+}
+
+function AppTabs({ initialQueryRef }: AppTabsProps) {
     const { currentUser } = usePreloadedQuery<AppTabsQueryType>(
         rootQuery,
         initialQueryRef,

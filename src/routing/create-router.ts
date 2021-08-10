@@ -11,15 +11,20 @@ interface PreparedData {
     [key: string]: any;
 }
 export interface PreloadableRouteConfig extends RouteConfig {
-    prepare?: (params: {[key: string]: string }) => PreparedData;
+    prepare?: (params: { [key: string]: string }) => PreparedData;
     preloadComponent: Resource;
 }
 
 export interface SubscriptionEntry {
-    component: Resource, prepared: PreparedData | undefined, routeData: match<{}>
+    component: Resource;
+    prepared: PreparedData | undefined;
+    routeData: match<{}>;
 }
 
-type subscriptionCallback = (entry: { location: Location, entries: SubscriptionEntry[]) => void;
+type subscriptionCallback = (entry: {
+    location: Location;
+    entries: SubscriptionEntry[];
+}) => void;
 
 export type RouterContextType = ReturnType<typeof createRouter>['context'];
 
@@ -52,7 +57,11 @@ const prepareMatches = (
         if (Component === null) {
             route.preloadComponent.load();
         }
-        return { component: route.preloadComponent, prepared, routeData: match };
+        return {
+            component: route.preloadComponent,
+            prepared,
+            routeData: match,
+        };
     });
 };
 
@@ -64,7 +73,7 @@ const prepareMatches = (
  */
 const createRouter = (
     routes: PreloadableRouteConfig[],
-    options: BrowserHistoryBuildOptions,
+    options?: BrowserHistoryBuildOptions,
 ) => {
     const history = createBrowserHistory(options);
 
@@ -112,10 +121,10 @@ const createRouter = (
             const id = nextId++;
             const dispose = () => {
                 subscribers.delete(id);
-            }
+            };
             subscribers.set(id, callback);
             return dispose;
-        }
+        },
     };
 
     return { context, cleanup };
