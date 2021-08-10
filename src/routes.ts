@@ -1,4 +1,3 @@
-import { ComponentProps } from 'react';
 import { loadQuery } from 'react-relay';
 import { resourceLoader } from 'routing';
 import { PreloadableRouteConfig } from 'routing/create-router';

@@ -1,4 +1,4 @@
-import { FC, FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 
 /**
  * A cache of resources to avoid loading the same module twice. This is important
