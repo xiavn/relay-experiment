@@ -6,10 +6,10 @@ import RelayEnvironment from './relay-environment';
 const routes: PreloadableRouteConfig[] = [
     {
         preloadComponent: resourceLoader('AppTabs', () => import('./AppTabs')),
-        prepare: async (): Promise<import('./AppTabs').AppTabsProps> => {
-            const AppTabsQuery = await (
-                await import('__generated__/AppTabsQuery.graphql')
-            ).default;
+        prepare: (): import('./AppTabs').AppTabsProps['prepared'] => {
+            // We have to use require here because import is async and would result in a promise
+            // the data here is passed through as props.prepared and doesn't want to be a promise.
+            const AppTabsQuery = require('__generated__/AppTabsQuery.graphql');
             return {
                 initialQueryRef: loadQuery<
                     import('__generated__/AppTabsQuery.graphql').AppTabsQuery

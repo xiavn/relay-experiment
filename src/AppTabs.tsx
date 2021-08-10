@@ -26,10 +26,10 @@ const rootQuery = graphql`
 `;
 
 export interface AppTabsProps {
-    initialQueryRef: PreloadedQuery<AppTabsQueryType>;
+    prepared: { initialQueryRef: PreloadedQuery<AppTabsQueryType> };
 }
 
-function AppTabs({ initialQueryRef }: AppTabsProps) {
+function AppTabs({ prepared: { initialQueryRef } }: AppTabsProps) {
     const { currentUser } = usePreloadedQuery<AppTabsQueryType>(
         rootQuery,
         initialQueryRef,
