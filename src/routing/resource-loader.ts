@@ -98,7 +98,7 @@ export class Resource {
 const resourceLoader = (moduleId: string, loader: loaderFunction) => {
     let resource = resourceMap.get(moduleId);
     if (typeof resource === 'undefined' || resource === null) {
-        const resource = new Resource(loader);
+        resource = new Resource(loader);
         resourceMap.set(moduleId, resource);
     }
     return resource;

@@ -1,7 +1,6 @@
-import AppTabs from 'AppTabs';
 import React, { Suspense } from 'react';
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
-import { createRouter } from 'routing';
+import { createRouter, RouterContext, RouterRenderer } from 'routing';
 import routes from 'routes';
 import './App.css';
 import RelayEnvironment from './relay-environment';
@@ -17,7 +16,9 @@ function AppRoot() {
     return (
         <Suspense fallback={'Loading...'}>
             <RelayEnvironmentProvider environment={RelayEnvironment}>
-                <AppTabs initialQueryRef={initialQueryRef} />
+                <RouterContext.Provider value={router.context}>
+                    <RouterRenderer />
+                </RouterContext.Provider>
             </RelayEnvironmentProvider>
         </Suspense>
     );

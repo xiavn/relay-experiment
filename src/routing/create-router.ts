@@ -54,7 +54,7 @@ const prepareMatches = (
                 ? route.prepare(match.params)
                 : undefined;
         const Component = route.preloadComponent.get();
-        if (Component === null) {
+        if (Component !== null) {
             route.preloadComponent.load();
         }
         return {
