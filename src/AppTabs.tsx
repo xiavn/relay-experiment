@@ -1,6 +1,6 @@
 import ErrorBoundary from 'ErrorBoundary';
 import FeedTab from 'FeedTab';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, PropsWithChildren } from 'react';
 import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import FeedTabFeedQuery, {
@@ -10,7 +10,7 @@ import { AppTabsQuery as AppTabsQueryType } from '__generated__/AppTabsQuery.gra
 import HelloUser from 'HelloUser';
 import UserInfo from 'UserInfo';
 import HomeTab from 'HomeTab';
-import { useHistory } from 'routing';
+import Link from 'routing/Link';
 
 type tabNames = 'home' | 'feed' | 'other';
 
@@ -19,7 +19,7 @@ const rootQuery = graphql`
         currentUser {
             token
             user {
-                id
+                ...HomeScreen_user
                 ...HelloUser_user
             }
         }
@@ -30,33 +30,23 @@ export interface AppTabsProps {
     prepared: { initialQueryRef: PreloadedQuery<AppTabsQueryType> };
 }
 
-function AppTabs({ prepared: { initialQueryRef } }: AppTabsProps) {
+function AppTabs({
+    prepared: { initialQueryRef },
+    children,
+}: PropsWithChildren<AppTabsProps>) {
     const { currentUser } = usePreloadedQuery<AppTabsQueryType>(
         rootQuery,
         initialQueryRef,
     );
-    const [
-        feedTabQueryRef,
-        loadFeedTabQuery,
-    ] = useQueryLoader<FeedTabFeedQueryType>(FeedTabFeedQuery);
-
-    const [screen, updateScreen] = useState<tabNames>('home');
-
-    const history = useHistory();
+    // const [
+    //     feedTabQueryRef,
+    //     loadFeedTabQuery,
+    // ] = useQueryLoader<FeedTabFeedQueryType>(FeedTabFeedQuery);
 
     const tabLoaders = {
-        feed: loadFeedTabQuery,
+        feed: undefined,
         home: undefined,
         other: undefined,
-    };
-
-    const selectTab = (tabName: tabNames) => () => {
-        const loader = tabLoaders[tabName];
-        if (typeof loader === 'function') {
-            loader({});
-        }
-        // updateScreen(tabName);
-        history?.push(`/${tabName}`);
     };
 
     return (
@@ -64,20 +54,15 @@ function AppTabs({ prepared: { initialQueryRef } }: AppTabsProps) {
             <ul>
                 {(Object.keys(tabLoaders) as tabNames[]).map((tab) => (
                     <li key={tab}>
-                        <button onClick={selectTab(tab)}>{tab}</button>
+                        <Link to={`/${tab}`}>{tab}</Link>
                     </li>
                 ))}
             </ul>
             {currentUser && currentUser.user && (
                 <HelloUser user={currentUser.user} />
             )}
-            {screen === 'home' && (
-                <div>
-                    <h2>Home</h2>
-                    {currentUser?.user ? <UserInfo /> : <HomeTab />}
-                </div>
-            )}
-            {screen === 'feed' &&
+            {children}
+            {/* {screen === 'feed' &&
                 feedTabQueryRef !== null &&
                 typeof feedTabQueryRef !== 'undefined' && (
                     <ErrorBoundary
@@ -92,7 +77,7 @@ function AppTabs({ prepared: { initialQueryRef } }: AppTabsProps) {
                         <FeedTab queryRef={feedTabQueryRef} />
                     </ErrorBoundary>
                 )}
-            {screen === 'other' && <div>Some other tab</div>}
+            {screen === 'other' && <div>Some other tab</div>} */}
         </div>
     );
 }

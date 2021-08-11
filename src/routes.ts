@@ -24,6 +24,15 @@ const routes: PreloadableRouteConfig[] = [
                 ),
             };
         },
+        routes: [
+            {
+                path: '/',
+                preloadComponent: resourceLoader(
+                    'HomeScreen',
+                    () => import('./HomeScreen'),
+                ),
+            },
+        ],
     },
 ];
 
