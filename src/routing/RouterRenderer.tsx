@@ -1,15 +1,15 @@
-import React, { Suspense, useContext, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { RouterContextType } from './create-router';
 import ErrorBoundary from './ErrorBoundary';
 import nestRoutes from './nest-routes';
-import RouterContext from './RouterContext';
+import { useRouterContext } from './RouterContext';
 
 /**
  * A component that accesses the current route entry from RoutingContext and renders
  * that entry.
  */
 const RouterRendererWrapper = () => {
-    const router = useContext(RouterContext);
+    const router = useRouterContext();
     if (router === null) {
         return null;
     }
