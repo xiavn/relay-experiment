@@ -74,7 +74,7 @@ const SignUpForm = () => {
     );
     return (
         <form onSubmit={handleSubmit}>
-            <h3>Log In</h3>
+            <h3>Sign Up</h3>
             <label>Email:</label>
             <br />
             <input

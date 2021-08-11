@@ -11,6 +11,7 @@ import HelloUser from 'HelloUser';
 import UserInfo from 'UserInfo';
 import HomeTab from 'HomeTab';
 import Link from 'routing/Link';
+import { CurrentUserContext } from 'current-user';
 
 type tabNames = 'home' | 'feed' | 'other';
 
@@ -19,7 +20,7 @@ const rootQuery = graphql`
         currentUser {
             token
             user {
-                ...HomeScreen_user
+                id
                 ...HelloUser_user
             }
         }
@@ -61,7 +62,10 @@ function AppTabs({
             {currentUser && currentUser.user && (
                 <HelloUser user={currentUser.user} />
             )}
-            {children}
+            <CurrentUserContext.Provider value={currentUser}>
+                {children}
+            </CurrentUserContext.Provider>
+
             {/* {screen === 'feed' &&
                 feedTabQueryRef !== null &&
                 typeof feedTabQueryRef !== 'undefined' && (

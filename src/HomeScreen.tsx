@@ -1,22 +1,14 @@
-import React, { useRef } from 'react';
-import graphql from 'babel-plugin-relay/macro';
-import { useFragment } from 'react-relay';
-import { HomeScreen_user$key } from '__generated__/HomeScreen_user.graphql';
+import React from 'react';
 import UserInfo from 'UserInfo';
 import HomeTab from 'HomeTab';
+import { useGetCurrentUser } from 'current-user';
 
-const HomeScreenQuery = graphql`
-    fragment HomeScreen_user on User {
-        id
-    }
-`;
-
-const HomeScreen = ({ user }: { user: HomeScreen_user$key }) => {
-    const data = useFragment(HomeScreenQuery, user);
+const HomeScreen = () => {
+    const currentUser = useGetCurrentUser();
     return (
         <div>
             <h2>Home</h2>
-            {data ? <UserInfo /> : <HomeTab />}
+            {currentUser?.user ? <UserInfo /> : <HomeTab />}
         </div>
     );
 };
