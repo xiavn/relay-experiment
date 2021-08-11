@@ -11,7 +11,6 @@ import HelloUser from 'HelloUser';
 import UserInfo from 'UserInfo';
 import HomeTab from 'HomeTab';
 import Link from 'routing/Link';
-import { CurrentUserContext } from 'current-user';
 
 type tabNames = 'home' | 'feed' | 'other';
 
@@ -62,9 +61,7 @@ function AppTabs({
             {currentUser && currentUser.user && (
                 <HelloUser user={currentUser.user} />
             )}
-            <CurrentUserContext.Provider value={currentUser}>
-                {children}
-            </CurrentUserContext.Provider>
+            {children}
 
             {/* {screen === 'feed' &&
                 feedTabQueryRef !== null &&

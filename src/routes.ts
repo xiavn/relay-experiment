@@ -26,11 +26,31 @@ const routes: PreloadableRouteConfig[] = [
         },
         routes: [
             {
+                path: '/other',
+                preloadComponent: resourceLoader(
+                    'OtherTab',
+                    () => import('./OtherTab'),
+                ),
+            },
+            {
                 path: '/',
                 preloadComponent: resourceLoader(
                     'HomeScreen',
                     () => import('./HomeScreen'),
                 ),
+                prepare: (): import('./HomeScreen').HomeScreenProps['prepared'] => {
+                    const HomeScreenQuery = require('__generated__/HomeScreenQuery.graphql');
+                    return {
+                        initialQueryRef: loadQuery<
+                            import('__generated__/HomeScreenQuery.graphql').HomeScreenQuery
+                        >(
+                            RelayEnvironment,
+                            HomeScreenQuery,
+                            {},
+                            { fetchPolicy: 'store-only' as 'store-or-network' }, // This is typed incorrectly store-only is legitimate
+                        ),
+                    };
+                },
             },
         ],
     },
