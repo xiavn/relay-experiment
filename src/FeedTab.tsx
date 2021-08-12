@@ -3,6 +3,7 @@ import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import { FeedTabFeedQuery } from '__generated__/FeedTabFeedQuery.graphql';
 import FeedItem from 'FeedItem';
+import { Link } from 'routing';
 
 const FeedQuery = graphql`
     query FeedTabFeedQuery {
@@ -23,6 +24,7 @@ function FeedTab({ prepared: { initialQueryRef } }: FeedTabQueryProps) {
         FeedQuery,
         initialQueryRef,
     );
+    const feedByNew = [...data.feed].reverse();
     return (
         <div
             style={{
@@ -30,7 +32,8 @@ function FeedTab({ prepared: { initialQueryRef } }: FeedTabQueryProps) {
             }}
         >
             <h2>Feed</h2>
-            {data.feed.map((link) => (
+            <Link to="/new-feed-item">Add new feed item</Link>
+            {feedByNew.map((link) => (
                 <FeedItem link={link} />
             ))}
         </div>
