@@ -48,6 +48,21 @@ const routes: PreloadableRouteConfig[] = [
                 },
             },
             {
+                path: '/feed',
+                preloadComponent: resourceLoader(
+                    'FeedTab',
+                    () => import('./FeedTab'),
+                ),
+                prepare: (): import('./FeedTab').FeedTabQueryProps['prepared'] => {
+                    const FeedTabQuery = require('__generated__/FeedTabFeedQuery.graphql');
+                    return {
+                        initialQueryRef: loadQuery<
+                            import('__generated__/FeedTabFeedQuery.graphql').FeedTabFeedQuery
+                        >(RelayEnvironment, FeedTabQuery, {}),
+                    };
+                },
+            },
+            {
                 path: '/',
                 preloadComponent: resourceLoader(
                     'HomeScreen',

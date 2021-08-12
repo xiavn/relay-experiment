@@ -12,8 +12,17 @@ const FeedQuery = graphql`
     }
 `;
 
-function FeedTab(props: { queryRef: PreloadedQuery<FeedTabFeedQuery> }) {
-    const data = usePreloadedQuery<FeedTabFeedQuery>(FeedQuery, props.queryRef);
+export interface FeedTabQueryProps {
+    prepared: {
+        initialQueryRef: PreloadedQuery<FeedTabFeedQuery>;
+    };
+}
+
+function FeedTab({ prepared: { initialQueryRef } }: FeedTabQueryProps) {
+    const data = usePreloadedQuery<FeedTabFeedQuery>(
+        FeedQuery,
+        initialQueryRef,
+    );
     return (
         <div
             style={{
