@@ -48,6 +48,13 @@ const routes: PreloadableRouteConfig[] = [
                 },
             },
             {
+                path: '/new-feed-item',
+                preloadComponent: resourceLoader(
+                    'AddNewFeedItem',
+                    () => import('./AddNewFeedItem'),
+                ),
+            },
+            {
                 path: '/feed',
                 preloadComponent: resourceLoader(
                     'FeedTab',
