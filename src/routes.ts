@@ -33,6 +33,21 @@ const routes: PreloadableRouteConfig[] = [
                 ),
             },
             {
+                path: '/sign-up',
+                preloadComponent: resourceLoader(
+                    'SignUpForm',
+                    () => import('./SignUpForm'),
+                ),
+                prepare: (): import('./SignUpForm').SignUpFormProps['prepared'] => {
+                    const SignUpFormQuery = require('__generated__/SignUpFormQuery.graphql');
+                    return {
+                        initialQueryRef: loadQuery<
+                            import('__generated__/SignUpFormQuery.graphql').SignUpFormQuery
+                        >(RelayEnvironment, SignUpFormQuery, {}),
+                    };
+                },
+            },
+            {
                 path: '/',
                 preloadComponent: resourceLoader(
                     'HomeScreen',

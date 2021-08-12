@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import graphql from 'babel-plugin-relay/macro';
-import { useLazyLoadQuery, useMutation } from 'react-relay';
+import { PreloadedQuery, useMutation, usePreloadedQuery } from 'react-relay';
 import { SignUpFormMutation } from '__generated__/SignUpFormMutation.graphql';
 import { saveUserData } from 'authentication';
 import { SignUpFormQuery } from '__generated__/SignUpFormQuery.graphql';
+import { useHistory } from 'routing';
 
 const signUpMutation = graphql`
     mutation SignUpFormMutation(
@@ -38,7 +39,11 @@ const allColoursQuery = graphql`
     }
 `;
 
-const SignUpForm = () => {
+export interface SignUpFormProps {
+    prepared: { initialQueryRef: PreloadedQuery<SignUpFormQuery> };
+}
+
+const SignUpForm = ({ prepared: { initialQueryRef } }: SignUpFormProps) => {
     const [email, updateEmail] = useState<string>('');
     const [password, updatePassword] = useState<string>('');
     const [name, updateName] = useState<string>('');
@@ -46,7 +51,11 @@ const SignUpForm = () => {
     const [commit, isInFlight] = useMutation<SignUpFormMutation>(
         signUpMutation,
     );
-    const data = useLazyLoadQuery<SignUpFormQuery>(allColoursQuery, {});
+    const data = usePreloadedQuery<SignUpFormQuery>(
+        allColoursQuery,
+        initialQueryRef,
+    );
+    const history = useHistory();
     const handleSubmit = useCallback(
         (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
@@ -62,6 +71,7 @@ const SignUpForm = () => {
                     const token = data.signup?.token;
                     if (id && token) {
                         saveUserData(id, token);
+                        history?.push('/');
                     }
                 },
                 updater(store) {
@@ -70,7 +80,7 @@ const SignUpForm = () => {
                 },
             });
         },
-        [email, password, name, faveColour, commit],
+        [email, password, name, faveColour, commit, history],
     );
     return (
         <form onSubmit={handleSubmit}>

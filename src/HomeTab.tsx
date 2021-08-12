@@ -1,12 +1,12 @@
 import LogInForm from 'LogInForm';
 import React from 'react';
-import SignUpForm from 'SignUpForm';
+import { Link } from 'routing';
 
 const HomeTab = () => {
     return (
         <div>
             <LogInForm />
-            <SignUpForm />
+            <Link to="/sign-up">Or sign up</Link>
         </div>
     );
 };

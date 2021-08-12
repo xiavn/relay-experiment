@@ -3,6 +3,7 @@ import resourceLoader from './resource-loader';
 import createRouter from './create-router';
 import RouterRenderer from './RouterRenderer';
 import useHistory from './use-history';
+import Link from './Link';
 
 export {
     RouterContext,
@@ -11,4 +12,5 @@ export {
     RouterRenderer,
     useRouterContext,
     useHistory,
+    Link,
 };
