@@ -1,15 +1,8 @@
-import ErrorBoundary from 'ErrorBoundary';
-import FeedTab from 'FeedTab';
-import React, { Fragment, PropsWithChildren } from 'react';
-import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay';
+import React, { PropsWithChildren } from 'react';
+import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
-import FeedTabFeedQuery, {
-    FeedTabFeedQuery as FeedTabFeedQueryType,
-} from '__generated__/FeedTabFeedQuery.graphql';
 import { AppTabsQuery as AppTabsQueryType } from '__generated__/AppTabsQuery.graphql';
 import HelloUser from 'HelloUser';
-import UserInfo from 'UserInfo';
-import HomeTab from 'HomeTab';
 import Link from 'routing/Link';
 
 type tabNames = 'home' | 'feed' | 'other';

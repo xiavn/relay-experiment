@@ -33,7 +33,6 @@ const AddNewFeedItem = () => {
                     history?.push('/feed');
                 },
                 updater(store) {
-                    const feed = store.getRoot().getLinkedRecords('feed') || [];
                     const payload = store.getRootField('createLink');
                     const newFeed = payload.getLinkedRecords('feed');
                     store.getRoot().setLinkedRecords(newFeed, 'feed');
