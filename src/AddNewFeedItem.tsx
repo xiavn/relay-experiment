@@ -7,7 +7,9 @@ import { AddNewFeedItemMutation } from '__generated__/AddNewFeedItemMutation.gra
 const addNewLinkMutation = graphql`
     mutation AddNewFeedItemMutation($url: String!, $description: String!) {
         createLink(url: $url, description: $description) {
-            ...FeedItem_link
+            feed {
+                ...FeedItem_link
+            }
         }
     }
 `;
@@ -33,7 +35,7 @@ const AddNewFeedItem = () => {
                 updater(store) {
                     const feed = store.getRoot().getLinkedRecords('feed') || [];
                     const payload = store.getRootField('createLink');
-                    const newFeed = [...feed, payload];
+                    const newFeed = payload.getLinkedRecords('feed');
                     store.getRoot().setLinkedRecords(newFeed, 'feed');
                 },
             });
